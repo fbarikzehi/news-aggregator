@@ -1,0 +1,30 @@
+.date-picker {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.date-label {
+    font-size: 1rem;
+    color: #333;
+}
+
+.date-input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.date-input:focus {
+    border-color: #007bff;
+}
+
+@media (max-width: 768px) {
+    .date-picker {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
