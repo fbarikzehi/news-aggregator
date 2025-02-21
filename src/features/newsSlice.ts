@@ -16,8 +16,8 @@ const newsSlice = createSlice({
         setArticles: (state, action: PayloadAction<any[]>) => {
             state.articles = action.payload;
         },
-        setFilters: (state, action: PayloadAction<Filter>) => {
-            state.filters = action.payload;
+        setFilters: (state, action: PayloadAction<Partial<Filter>>) => {
+            state.filters = { ...state.filters, ...action.payload };
         },
     },
 });

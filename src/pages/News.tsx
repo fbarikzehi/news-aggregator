@@ -6,14 +6,29 @@ import SearchBar from '../components/SearchBar';
 import {  setArticles} from '../features/newsSlice';
 import { fetchNewsArticles } from '../services/newsService';
 import { RootState } from '../store';
+import Select from '../components/Select';
+import { categories,sources } from "../constant";
+import   "../styles/news.css";
+
 
 const News: React.FC = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.news.filters);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSearch = async () => {
-    const data = await fetchNewsArticles(filters);
-    dispatch(setArticles(data));
+    setError(null); 
+    setLoading(true);
+    try {
+      const data = await fetchNewsArticles(filters);
+      dispatch(setArticles(data));
+    } catch (error) {
+      setError('Failed to fetch articles. Please try again later.');
+      console.error('Error in handleSearch:', error);
+    }finally{
+      setLoading(false);
+    }
   };
 
   
@@ -22,19 +37,30 @@ const News: React.FC = () => {
   }, [filters]);
 
   return (
-    <div>
-        <div>
-          <div className="navbar-search">
-          <SearchBar onSearch={handleSearch} />
-          </div>
-          <div>
-          <DatePicker  />
-          </div>
-        </div>
-        <div className="news">
-          <ArticleList />
-        </div>
+    <div className="news-page">
+    <div className="error-container">
+      {error && <div className="error-message">{error}</div>}
     </div>
+    <div className="filters-container">
+      <div className="search-bar-container">
+        <SearchBar onSearch={handleSearch} />
+      </div>
+      <div className="date-picker-container">
+        <DatePicker />
+      </div>
+      <div className="selects-container">
+        <Select label="Category" options={categories} filterKey="category" />
+        <Select label="Source" options={sources} filterKey="source" />
+      </div>
+    </div>
+    <div className="articles-container">
+      {loading ? (
+        <div className="loading-indicator">Loading...</div>
+      ) : (
+        <ArticleList />
+      )}
+    </div>
+  </div>
   );
 };
 

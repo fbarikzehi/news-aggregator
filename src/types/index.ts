@@ -24,7 +24,7 @@ export interface Article {
 
 export interface Filter {
     keyword: string;
-    date: string;
+    date: Date | '';
     category: string;
     source: string;
 }
@@ -34,4 +34,11 @@ export interface NewsState {
     loading: boolean;
     error: string | null;
     filters: Filter;
+}
+
+
+export interface NewsSource {
+    getName(): string;
+    getURL(filter: Filter): string;
+    parseResponse(response: any): Article[];
 }
